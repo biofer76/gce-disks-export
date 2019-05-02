@@ -39,6 +39,30 @@ $ ./gce-disks-export my-bucket-name
 $ ./gce-disks-export my-bucket-name qcow2
 ``` 
 
+#### Cloud Build Activation
+
+Image export requires [Cloud Build API](https://console.cloud.google.com/cloud-build/builds), if you haven’t already done, script will ask you to activate it.
+
+```
+The "cloudbuild.googleapis.com" service is not enabled for this
+project. It is required for this operation.
+Would you like to enable this service? (Y/n)?  y
+```
+
+You must enable permission to Cloud Build service account, answer yes to the next prompt:
+
+```
+The following IAM permissions are needed for this operation:
+[roles/iam.serviceAccountTokenCreator
+serviceAccount:347021062934@cloudbuild.gserviceaccount.com
+roles/compute.admin
+serviceAccount:347021062934@cloudbuild.gserviceaccount.com
+roles/iam.serviceAccountUser
+serviceAccount:347021062934@cloudbuild.gserviceaccount.com]
+
+Would you like to add the permissions (Y/n)?  y
+```
+
 ## Google Storage
 
 Based on Storage class of your bucket and your images access requirements, you can save monthly cost. 
