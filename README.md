@@ -1,4 +1,4 @@
-# Google Compute Engine - Disks export tool
+# Google Compute Engine - Disks Export Tool
  
 Export Google Cloud instances disks in your favorite format and store in [Cloud Storage](https://cloud.google.com/storage/).
 
