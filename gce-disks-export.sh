@@ -56,7 +56,7 @@ if [ -z $IMAGE_FORMAT ]
 		echo "No image format set, use vmdk as default format"
 	else
 		# Check if supplied image format is supported
-		if  [ "$IMAGE_FORMAT" == "vmdk" ] || [ "$IMAGE_FORMAT" == "vhdx" ] [ "$IMAGE_FORMAT" == "vpc" ] || [ "$IMAGE_FORMAT" == "vdi" ] || [ "$IMAGE_FORMAT" == "qcow2" ]
+		if  [ "$IMAGE_FORMAT" == "vmdk" ] || [ "$IMAGE_FORMAT" == "vhdx" ] || [ "$IMAGE_FORMAT" == "vpc" ] || [ "$IMAGE_FORMAT" == "vdi" ] || [ "$IMAGE_FORMAT" == "qcow2" ]
 			then
 				echo "Use $IMAGE_FORMAT image format"
 			else
