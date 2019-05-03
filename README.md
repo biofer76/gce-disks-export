@@ -41,7 +41,7 @@ $ ./gce-disks-export my-bucket-name qcow2
 
 #### Cloud Build Activation
 
-Image export requires [Cloud Build API](https://console.cloud.google.com/cloud-build/builds), if you haven’t already done, script will ask you to activate it.
+Image export requires [Cloud Build API](https://console.cloud.google.com/cloud-build/builds) activation, if you haven’t already done, script will ask you to activate it.
 
 ```
 The "cloudbuild.googleapis.com" service is not enabled for this
@@ -49,7 +49,7 @@ project. It is required for this operation.
 Would you like to enable this service? (Y/n)?  y
 ```
 
-You must enable permission to Cloud Build service account, answer yes to the next prompt:
+You must enable permission to Cloud Build service account, answer _yes_ to the next prompt:
 
 ```
 The following IAM permissions are needed for this operation:
@@ -112,5 +112,3 @@ Available Cloud Storage classes:
 ## License
 
 MIT
-
- 

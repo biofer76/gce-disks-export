@@ -69,7 +69,6 @@ fi
 ##
 ## INTERACTIVE DISKS LIST
 ##
-
 disk_num=0
 echo "[0] All Disks"
 for diskname in $GCE_DISKS
@@ -98,7 +97,6 @@ fi
 ##
 ## EXPORT PROCEDURE
 ##
-
 for diskname in $GCE_DISKS
 	do
 		echo "---"
@@ -106,7 +104,7 @@ for diskname in $GCE_DISKS
 		# Delete image if exists
 		delete_image "$diskname"
 		# Get disk zone
-		diskzone="$(gcloud compute disks list | grep $diskname | awk '{print $2}')"
+		diskzone="$(gcloud compute disks list | egrep -w "^$diskname " | awk '{print $2}')"
 		echo "---"
 		echo "Create new image for disk $diskname in zone $diskzone"
 		gcloud compute images create $diskname \
