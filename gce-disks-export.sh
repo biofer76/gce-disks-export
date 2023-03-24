@@ -1,7 +1,7 @@
 #!/bin/bash
 ##
 ## gce-disks-export: Export Google Cloud instances disks to Cloud Storage
-## MIT License | Copyright (c) 2019 Fabio Ferrari
+## MIT License | Copyright (c) 2019 Fabio Ferrari | Modified by Chriolant
 ## GitHub repository: https://github.com/fabio-particles/gce-disks-export
 ##
 ## This software comes with ABSOLUTELY NO WARRANTY.
@@ -11,10 +11,14 @@
 GCE_DISKS=$(gcloud compute disks list --format="csv[no-heading](name)"  | awk '{print $1}' )
 BUCKET_NAME=$1
 IMAGE_FORMAT=$2
+NETWORK=$3
+SUBNET=$4
 
 usage() {
-        echo "Usage: gcp-export-images BUCKET_NAME [IMAGE_FORMAT]"
+        echo "Usage: gcp-export-images BUCKET_NAME [IMAGE_FORMAT] [NETWORK] [SUBNET]"
         echo "Supported image formats: vmdk (default), vhdx, vpc, vdi, and qcow2"
+        echo "When using a Custom/Shared VPC, specify the network AND subnet,"
+        echo "otherwise the script will use the default network"
         echo "Requires Google SDK: gcloud, gsutil and alpha commands"
         credits
 }
@@ -66,6 +70,22 @@ if [ -z $IMAGE_FORMAT ]
                 fi
 fi
 
+# Set default network if not set as argument
+if [ -z $NETWORK ]
+        then
+                NETWORK="default"
+                echo "No network set, using default network"
+        else
+                echo "Using the $NETWORK VPC"
+                if [ -z $SUBNET ]
+                then
+                        echo "Network was specified but subnet was not."
+                        exit 1
+                else
+                        echo "Using the $SUBNET subnet"
+                fi
+fi
+
 ##
 ## INTERACTIVE DISKS LIST
 ##
@@ -113,10 +133,20 @@ for diskname in $GCE_DISKS
                         --force
                 echo "---"
                 echo "Export disk image $diskname.$IMAGE_FORMAT to Cloud Storage Bucket: $BUCKET_NAME"
-                gcloud alpha compute images export \
-                                --destination-uri gs://$BUCKET_NAME/$diskname.$IMAGE_FORMAT \
-                                --image $diskname \
-                                --export-format $IMAGE_FORMAT
+                if [ $NETWORK == "default" ]
+                then
+                        gcloud compute images export \
+                                        --destination-uri gs://$BUCKET_NAME/$diskname.$IMAGE_FORMAT \
+                                        --image $diskname \
+                                        --export-format $IMAGE_FORMAT
+                else
+                        gcloud compute images export \
+                                        --destination-uri gs://$BUCKET_NAME/$diskname.$IMAGE_FORMAT \
+                                        --image $diskname \
+                                        --export-format $IMAGE_FORMAT \
+                                        --network $NETWORK \
+                                        --subnet $SUBNET
+                fi
                 # Delete image after exporting
                 delete_image $diskname
 done
